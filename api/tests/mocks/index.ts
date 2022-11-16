@@ -1,1 +1,1 @@
-export * from './categoryData.mock';
+export * from './category.mock';
