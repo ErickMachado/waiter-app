@@ -15,6 +15,10 @@ export class InMemoryCategoriesRepository implements CategoriesRepository {
     return Promise.resolve(true);
   }
 
+  public async listAll(): Promise<Category[]> {
+    return [...this.database.values()];
+  }
+
   public async save(category: Category): Promise<void> {
     this.database.set(category.id, category);
   }
