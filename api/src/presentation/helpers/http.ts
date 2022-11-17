@@ -7,9 +7,22 @@ export interface HttpResponse<B> {
   statusCode: number;
 }
 
-export function badRequest(body: Error): HttpResponse<Error> {
+export interface HttpError {
+  error: string;
+  help?: string;
+  type: string;
+}
+
+function buildError(error: Error): HttpError {
   return {
-    body,
+    error: error.message,
+    type: error.name,
+  };
+}
+
+export function badRequest(error: Error): HttpResponse<HttpError> {
+  return {
+    body: buildError(error),
     statusCode: 400,
   };
 }
@@ -21,9 +34,9 @@ export function created<B>(body?: B): HttpResponse<B> {
   };
 }
 
-export function conflict(body: Error): HttpResponse<Error> {
+export function conflict(error: Error): HttpResponse<HttpError> {
   return {
-    body,
+    body: buildError(error),
     statusCode: 409,
   };
 }
@@ -41,9 +54,9 @@ export function ok<B>(body?: B): HttpResponse<B> {
   };
 }
 
-export function unprocessableEntity(body: Error): HttpResponse<Error> {
+export function unprocessableEntity(error: Error): HttpResponse<HttpError> {
   return {
-    body,
-    statusCode: 429,
+    body: buildError(error),
+    statusCode: 422,
   };
 }

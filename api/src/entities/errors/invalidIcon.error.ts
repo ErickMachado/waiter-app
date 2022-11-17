@@ -1,6 +1,8 @@
 export class InvalidIconError extends Error {
-  constructor(icon: string) {
-    super(`${icon} must be an emoji character`);
+  constructor() {
+    super(
+      'Icon must be an emoji character. Try to send a single emoji character.'
+    );
 
     this.name = 'InvalidIconError';
   }

@@ -1,5 +1,6 @@
 import { Category } from '@/entities';
 import { InvalidIconLengthError } from '@/entities/errors';
+import { CategoryDTO } from '@/presentation/dto';
 import { MissingParamError } from '@/presentation/errors';
 import { CreateCategoryHandler } from '@/presentation/handlers/category';
 import { left } from '@/shared';
@@ -21,12 +22,16 @@ describe('Create category handler', () => {
     // Arrange
     const payload = mockCategoryData({ name: '' });
     const { sut } = makeSut();
+    const error = new MissingParamError('name');
 
     // Act
     const response = await sut.handle({ body: payload });
 
     // Assert
-    expect(response.body).toEqual(new MissingParamError('name'));
+    expect(response.body).toEqual({
+      error: error.message,
+      type: error.name,
+    });
     expect(response.statusCode).toBe(400);
   });
 
@@ -34,12 +39,16 @@ describe('Create category handler', () => {
     // Arrange
     const payload = mockCategoryData({ icon: '' });
     const { sut } = makeSut();
+    const error = new MissingParamError('icon');
 
     // Act
     const response = await sut.handle({ body: payload });
 
     // Assert
-    expect(response.body).toEqual(new MissingParamError('icon'));
+    expect(response.body).toEqual({
+      error: error.message,
+      type: error.name,
+    });
     expect(response.statusCode).toBe(400);
   });
 
@@ -50,13 +59,17 @@ describe('Create category handler', () => {
       return left(new InvalidIconLengthError(payload.icon));
     };
     const { sut } = makeSut(executeMock);
+    const error = new InvalidIconLengthError(payload.icon);
 
     // Act
     const response = await sut.handle({ body: payload });
 
     // Assert
-    expect(response.body).toEqual(new InvalidIconLengthError(payload.icon));
-    expect(response.statusCode).toBe(429);
+    expect(response.body).toEqual({
+      error: error.message,
+      type: error.name,
+    });
+    expect(response.statusCode).toBe(422);
   });
 
   it('Should return conflict when category already exists', async () => {
@@ -66,12 +79,16 @@ describe('Create category handler', () => {
       return left(new CategoryConflictError(payload.name));
     };
     const { sut } = makeSut(executeMock);
+    const error = new CategoryConflictError(payload.name);
 
     // Act
     const response = await sut.handle({ body: payload });
 
     // Assert
-    expect(response.body).toEqual(new CategoryConflictError(payload.name));
+    expect(response.body).toEqual({
+      error: error.message,
+      type: error.name,
+    });
     expect(response.statusCode).toBe(409);
   });
 
@@ -101,7 +118,7 @@ describe('Create category handler', () => {
     const response = await sut.handle({ body: payload });
 
     // Assert
-    expect(response.body).toBeInstanceOf(Category);
+    expect(response.body).toBeInstanceOf(CategoryDTO);
     expect(response.statusCode).toBe(201);
   });
 });

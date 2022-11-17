@@ -1,9 +1,11 @@
-import { Category, CategoryData } from '@/entities';
+import { CategoryData } from '@/entities';
+import { CategoryDTO } from '@/presentation/dto';
 import { MissingParamError } from '@/presentation/errors';
 import {
   badRequest,
   conflict,
   created,
+  HttpError,
   HttpRequest,
   HttpResponse,
   internalServerError,
@@ -17,7 +19,7 @@ export class CreateCategoryHandler {
 
   public async handle(
     request: HttpRequest<CategoryData>
-  ): Promise<HttpResponse<Category | Error | void>> {
+  ): Promise<HttpResponse<CategoryDTO | HttpError | void>> {
     if (!request.body?.name) {
       return badRequest(new MissingParamError('name'));
     }
@@ -37,8 +39,8 @@ export class CreateCategoryHandler {
       }
       if (category.isLeft()) return unprocessableEntity(category.value);
 
-      return created<Category>(category.value);
-    } catch (error) {
+      return created<CategoryDTO>(new CategoryDTO(category.value));
+    } catch {
       return internalServerError();
     }
   }

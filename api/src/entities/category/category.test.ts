@@ -29,7 +29,7 @@ describe('Category', () => {
     const sut = Category.create(dataMock);
 
     // Assert
-    expect(sut).toEqual(left(new InvalidIconError(dataMock.icon)));
+    expect(sut).toEqual(left(new InvalidIconError()));
   });
 
   it('Should return InvalidIconLengthError when icon is an emoji but length is grater than 1', () => {
