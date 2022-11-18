@@ -50,3 +50,11 @@ jobs:
         run: "cd api && yarn install"
       - name: "Run integration tests"
         run: "cd api && yarn test:integration"
+  docs:
+    name: "🕵️ Validate API docs"
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: "actions/checkout@v3"
+      - uses: "uses: char0n/swagger-editor-validate@v1"
+        with:
+          definition-file: "api/api-doc.yml"
