@@ -65,7 +65,7 @@ describe('Create category use case', () => {
     const response = await sut.execute(dataMock);
 
     // Assert
-    expect(response).toEqual(left(new InvalidIconError(dataMock.icon)));
+    expect(response).toEqual(left(new InvalidIconError()));
   });
 
   it('Should call repository method to check if a category with the provided name already exists', async () => {

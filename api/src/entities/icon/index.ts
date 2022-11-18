@@ -14,8 +14,8 @@ export class Icon {
     const emojiRegex = /[\p{Emoji}\u200d]+/gu;
     const icon = text.match(emojiRegex);
 
-    if (!text) return left(new InvalidIconError(text));
-    if (!icon) return left(new InvalidIconError(text));
+    if (!text) return left(new InvalidIconError());
+    if (!icon) return left(new InvalidIconError());
     if (icon.toString().length > 2) {
       return left(new InvalidIconLengthError(icon.toString()));
     }

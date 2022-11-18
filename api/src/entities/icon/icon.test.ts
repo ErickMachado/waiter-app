@@ -12,7 +12,7 @@ describe('Icon', () => {
     const sut = Icon.parse(icon);
 
     // Assert
-    expect(sut).toEqual(left(new InvalidIconError(icon)));
+    expect(sut).toEqual(left(new InvalidIconError()));
   });
 
   it('Should reject strings that contains more than one emoji', () => {
