@@ -38,13 +38,15 @@ export class Product {
     readonly ingredients: ParsedIngredient[],
     readonly imageName: string,
     readonly name: Name,
-    readonly price: number
+    readonly price: number,
+    id?: string
   ) {
-    this.id = cuid();
+    this.id = id || cuid();
   }
 
   public static create(
-    data: ProductData
+    data: ProductData,
+    id?: string
   ): Either<
     | EmptyDescriptionError
     | InvalidDescriptionLengthError
@@ -85,7 +87,8 @@ export class Product {
         ingredients,
         data.imageName,
         name,
-        data.price
+        data.price,
+        id
       )
     );
   }

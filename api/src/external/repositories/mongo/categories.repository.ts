@@ -1,6 +1,6 @@
 import { CategoriesRepository } from '@/useCases/ports';
 import { CategorySchema } from '@/external/schemas/Category';
-import { Category, Icon, Name } from '@/entities';
+import { Category } from '@/entities';
 
 export class MongoCategoriesRepository implements CategoriesRepository {
   public async exists(name: string): Promise<boolean> {
@@ -15,24 +15,17 @@ export class MongoCategoriesRepository implements CategoriesRepository {
     const categories = await CategorySchema.find();
 
     return categories.map((document) => {
-      const icon = Icon.parse(document.icon);
-      const name = Name.parse(document.name);
-      const id: string = document.id;
-
-      if (icon.isLeft() || name.isLeft()) {
-        throw new Error('Icon or name are invalid');
-      }
-
-      const category = Category.create({
-        icon: icon.value.value,
-        name: name.value.value,
-      });
+      const category = Category.create(
+        {
+          icon: document.icon,
+          name: document.name,
+        },
+        document.id
+      );
 
       if (category.isLeft()) {
-        throw new Error(category.value.message);
+        throw new Error(`Category with id ${document.id} is invalid`);
       }
-
-      category.value.id = id;
 
       return category.value;
     });
@@ -44,5 +37,25 @@ export class MongoCategoriesRepository implements CategoriesRepository {
       icon: category.icon.value,
       name: category.name.value,
     });
+  }
+
+  public async findById(categoryId: string): Promise<Category | undefined> {
+    const document = await CategorySchema.findOne().where({ id: categoryId });
+
+    if (!document) return undefined;
+
+    const category = Category.create(
+      {
+        icon: document.icon,
+        name: document.name,
+      },
+      document.id
+    );
+
+    if (category.isLeft()) {
+      throw new Error(`Category with id ${document.id} is invalid`);
+    }
+
+    return category.value;
   }
 }

@@ -8,7 +8,7 @@ interface Options extends ProductData {
 }
 
 export const mockProductData = (data?: Partial<Options>): ProductData => ({
-  categoryId: cuid(),
+  categoryId: data?.categoryId ?? cuid(),
   description: data?.description ?? faker.lorem.words(),
   imageName: faker.system.fileName(),
   name: data?.name ?? faker.lorem.word(),

@@ -23,7 +23,7 @@ export class InMemoryCategoriesRepository implements CategoriesRepository {
     this.database.set(category.id, category);
   }
 
-  public async populate(): Promise<Category> {
+  public populate(): Category {
     const data = mockCategoryData();
     const category = Category.create(data);
 
@@ -31,8 +31,12 @@ export class InMemoryCategoriesRepository implements CategoriesRepository {
       throw new Error('Error to populate in memory database');
     }
 
-    await this.save(category.value);
+    this.database.set(category.value.id, category.value);
 
     return category.value;
+  }
+
+  public async findById(categoryId: string): Promise<Category | undefined> {
+    return this.database.get(categoryId);
   }
 }

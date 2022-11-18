@@ -20,11 +20,14 @@ export interface CategoryData {
 export class Category {
   public id: string;
 
-  private constructor(readonly icon: Icon, readonly name: Name) {
-    this.id = cuid();
+  private constructor(readonly icon: Icon, readonly name: Name, id?: string) {
+    this.id = id || cuid();
   }
 
-  public static create(data: CategoryData): CategoryEntityResponse {
+  public static create(
+    data: CategoryData,
+    id?: string
+  ): CategoryEntityResponse {
     const nameOrError = Name.parse(data.name);
     const iconOrError = Icon.parse(data.icon);
 
@@ -34,6 +37,6 @@ export class Category {
     const name = nameOrError.value;
     const icon = iconOrError.value;
 
-    return right(new Category(icon, name));
+    return right(new Category(icon, name, id));
   }
 }
