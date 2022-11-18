@@ -90,7 +90,7 @@ components:
           example: '🍕'
         id:
           type: 'string'
-          format: 'uuid'
+          example: 'clamk5l4r00002v6lgtcs6wji'
         name:
           type: 'string'
           example: 'Pizzas'
