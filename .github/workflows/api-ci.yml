@@ -1,0 +1,52 @@
+name: API CI
+
+on:
+  push:
+    paths:
+      - "api/**"
+
+jobs:
+  build:
+    name: "🔨 Build"
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: "actions/checkout@v3"
+      - name: "Setup Node.js"
+        uses: "actions/setup-node@v3"
+        with:
+          cache: "npm"
+          cache-dependency-path: "api/yarn.lock"
+      - name: "Install dependencies"
+        run: "cd api && yarn install"
+      - name: "Run build"
+        run: "cd api && yarn build"
+  unit:
+    name: "🧪 Unit tests"
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: "actions/checkout@v3"
+      - name: "Setup Node.js"
+        uses: "actions/setup-node@v3"
+        with:
+          cache: "npm"
+          cache-dependency-path: "api/yarn.lock"
+      - name: "Install dependencies"
+        run: "cd api && yarn install"
+      - name: "Run unit tests"
+        run: "cd api && yarn test:unit"
+  integration:
+    name: "🧪 Integration tests"
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: "actions/checkout@v3"
+      - name: "Setup Node.js"
+        uses: "actions/setup-node@v3"
+        with:
+          cache: "npm"
+          cache-dependency-path: "api/yarn.lock"
+      - name: "Setup MongoDB"
+        uses: "supercharge/mongodb-github-action@1.8.0"
+      - name: "Install dependencies"
+        run: "cd api && yarn install"
+      - name: "Run integration tests"
+        run: "cd api && yarn test:integration"
