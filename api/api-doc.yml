@@ -1,0 +1,111 @@
+openapi: '3.0.0'
+
+info:
+  description: 'A food order API for the waiterAPP project'
+  title: 'WaiterAPP API'
+  version: '0.0.1'
+
+tags:
+  - name: 'Category'
+
+paths:
+  /categories:
+    get:
+      description: 'Return all categories registered'
+      summary: 'Return a list of categories'
+      responses:
+        '200':
+          description: 'A list of categories'
+          content:
+            application/json:
+              schema:
+                type: 'array'
+                items:
+                  $ref: '#/components/schemas/Category'
+        '500':
+          description: 'An unknown error happens'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+      tags: ['Category']
+    post:
+      description: 'Create a new category and return it'
+      summary: 'Create a new category'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: 'object'
+              properties:
+                icon:
+                  type: 'string'
+                  example: 🍔
+                name:
+                  type: 'string'
+                  example: 'Lanches'
+      responses:
+        '200':
+          description: 'The category was successfully created'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '400':
+          description: 'The property name or icon was not sent'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '422':
+          description: 'The payload is correct but some value is invalid'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnprocessableEntity'
+        '500':
+          description: 'An unknown error happens'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+      tags: ['Category']
+
+components:
+  schemas:
+    BadRequest:
+      type: 'object'
+      properties:
+        error:
+          example: 'Required payload param is missing'
+          type: 'string'
+        statusCode:
+          type: 'number'
+          example: 400
+    Category:
+      type: 'object'
+      properties:
+        icon:
+          type: 'string'
+          example: '🍕'
+        id:
+          type: 'string'
+          format: 'uuid'
+        name:
+          type: 'string'
+          example: 'Pizzas'
+    InternalServerError:
+      type: 'object'
+      properties:
+        statusCode:
+          type: 'number'
+          example: 500
+    UnprocessableEntity:
+      type: 'object'
+      properties:
+        error:
+          example: 'The payload is correct but some value is invalid'
+          type: 'string'
+        statusCode:
+          type: 'number'
+          example: 422
