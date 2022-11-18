@@ -1,14 +1,9 @@
 import { faker } from '@faker-js/faker';
 import { CategoryData } from '@/entities';
 
-interface CategoryDataMockOptions {
-  icon?: string;
-  name?: string;
-}
-
 export const mockCategoryData = (
-  options?: CategoryDataMockOptions
+  data?: Partial<CategoryData>
 ): CategoryData => ({
-  icon: options?.icon ?? '🍎',
-  name: options?.name ?? faker.lorem.word(),
+  icon: data?.icon ?? '🍎',
+  name: data?.name ?? faker.lorem.word(),
 });
