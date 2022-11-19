@@ -1,4 +1,7 @@
+import { Product } from '@/entities';
 import {
+  EmptyDescriptionError,
+  InvalidDescriptionLengthError,
   InvalidIconError,
   InvalidIconLengthError,
   InvalidNameError,
@@ -81,5 +84,68 @@ describe('Create product use case', () => {
 
     // Assert
     expect(response).toEqual(left(new InvalidNameError('')));
+  });
+
+  it('Should return an error when name is empty', async () => {
+    // Arrange
+    const { categoriesRepository, sut } = makeSut();
+    const category = categoriesRepository.populate();
+    const payload = mockProductData({
+      categoryId: category.id,
+      name: '',
+    });
+
+    // Act
+    const response = await sut.execute(payload);
+
+    // Assert
+    expect(response).toEqual(left(new InvalidNameError('')));
+  });
+
+  it('Should return an error when description is empty', async () => {
+    // Arrange
+    const { categoriesRepository, sut } = makeSut();
+    const category = categoriesRepository.populate();
+    const payload = mockProductData({
+      categoryId: category.id,
+      description: '',
+    });
+
+    // Act
+    const response = await sut.execute(payload);
+
+    // Assert
+    expect(response).toEqual(left(new EmptyDescriptionError()));
+  });
+
+  it('Should return an error when description length is greater than 255 characters', async () => {
+    // Arrange
+    const { categoriesRepository, sut } = makeSut();
+    const category = categoriesRepository.populate();
+    const payload = mockProductData({
+      categoryId: category.id,
+      description: faker.lorem.words(256),
+    });
+
+    // Act
+    const response = await sut.execute(payload);
+
+    // Assert
+    expect(response).toEqual(left(new InvalidDescriptionLengthError()));
+  });
+
+  it('Should create product', async () => {
+    // Arrange
+    const { categoriesRepository, sut } = makeSut();
+    const category = categoriesRepository.populate();
+    const payload = mockProductData({
+      categoryId: category.id,
+    });
+
+    // Act
+    const response = await sut.execute(payload);
+
+    // Assert
+    expect(response.isRight() && response.value).toBeInstanceOf(Product);
   });
 });

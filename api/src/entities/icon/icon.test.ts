@@ -36,4 +36,12 @@ describe('Icon', () => {
     // Assert
     expect(sut).toEqual({ value: { icon } });
   });
+
+  it('Should reject empty strings', () => {
+    // Act
+    const sut = Icon.parse('');
+
+    // Assert
+    expect(sut).toEqual(left(new InvalidIconError()));
+  });
 });

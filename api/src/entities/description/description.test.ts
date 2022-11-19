@@ -29,6 +29,17 @@ describe('Description entity', () => {
     expect(sut).toEqual(left(new EmptyDescriptionError()));
   });
 
+  it('Should return description on value access', () => {
+    // Arrange
+    const description = faker.lorem.words();
+
+    // Act
+    const sut = Description.parse(description);
+
+    // Assert
+    expect(sut.isRight() && sut.value.value).toBe(description);
+  });
+
   it('Should create description', () => {
     // Arrange
     const description = faker.lorem.words();

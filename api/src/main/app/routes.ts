@@ -13,6 +13,7 @@ router.get('/categories', async (request, response) => {
 
   return response.status(statusCode).json(body);
 });
+
 router.post('/categories', async (request, reply) => {
   const handler = buildCreateCategoriesHandler();
 

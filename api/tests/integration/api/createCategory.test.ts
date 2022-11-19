@@ -4,7 +4,7 @@ import { CategorySchema } from '@/external/schemas/Category';
 import { initTestApp } from '@tests/utils/initTestApp';
 import mongoose from 'mongoose';
 
-describe('Create category', () => {
+describe('POST /categories', () => {
   afterEach(async () => {
     await mongoose.connection.db.dropDatabase();
     await mongoose.disconnect();

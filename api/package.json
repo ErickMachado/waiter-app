@@ -6,6 +6,7 @@
     "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^5.43.0",
     "@typescript-eslint/parser": "^5.43.0",
+    "@vitest/coverage-c8": "^0.25.2",
     "eslint": "^8.27.0",
     "supertest": "^6.3.1",
     "tsx": "^3.12.1",
@@ -27,7 +28,8 @@
     "dev": "tsx watch src/main/app/bootstrap.ts",
     "start": "node dist",
     "test:unit": "vitest run --dir src",
-    "test:integration": "vitest run --dir tests/integration"
+    "test:integration": "vitest run --dir tests/integration",
+    "test:cov": "vitest run --coverage"
   },
   "version": "1.0.0"
 }
