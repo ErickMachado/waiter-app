@@ -9,25 +9,26 @@ import {
 import { Either, left, right } from '@/shared';
 import { CategoryNotFoundError } from '@/useCases/errors';
 import { CategoriesRepository, ProductsRepository } from '@/useCases/ports';
+import { UseCase } from '@/useCases/types/useCase';
 
-export class CreateProductUseCase {
+export type CreateProductResponse = Either<
+  | InvalidDescriptionLengthError
+  | InvalidIconError
+  | InvalidIconLengthError
+  | InvalidNameError
+  | EmptyDescriptionError,
+  Product
+>;
+
+export class CreateProductUseCase
+  implements UseCase<ProductData, CreateProductResponse>
+{
   constructor(
     private readonly categoriesRepository: CategoriesRepository,
     private readonly productsRepository: ProductsRepository
   ) {}
 
-  public async execute(
-    payload: ProductData
-  ): Promise<
-    Either<
-      | InvalidDescriptionLengthError
-      | InvalidIconError
-      | InvalidIconLengthError
-      | InvalidNameError
-      | EmptyDescriptionError,
-      Product
-    >
-  > {
+  public async execute(payload: ProductData): Promise<CreateProductResponse> {
     const category = await this.categoriesRepository.findById(
       payload.categoryId
     );

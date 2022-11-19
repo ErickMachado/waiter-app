@@ -47,6 +47,13 @@ export function internalServerError(): HttpResponse<void> {
   };
 }
 
+export function notFound(error: Error): HttpResponse<HttpError> {
+  return {
+    body: buildError(error),
+    statusCode: 404,
+  };
+}
+
 export function ok<B>(body?: B): HttpResponse<B> {
   return {
     body,

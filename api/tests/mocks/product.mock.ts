@@ -10,9 +10,9 @@ interface Options extends ProductData {
 export const mockProductData = (data?: Partial<Options>): ProductData => ({
   categoryId: data?.categoryId ?? cuid(),
   description: data?.description ?? faker.lorem.words(),
-  imageName: faker.system.fileName(),
+  imageName: data?.imageName ?? faker.system.fileName(),
   name: data?.name ?? faker.lorem.word(),
-  price: faker.datatype.number(),
+  price: data?.price ?? faker.datatype.number(),
   ingredients: [
     {
       icon: data?.ingredientIcon ?? '🧀',
