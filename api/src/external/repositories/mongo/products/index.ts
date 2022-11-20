@@ -8,6 +8,7 @@ export class MongoProductsRepository implements ProductsRepository {
       categoryId: product.categoryId,
       description: product.description.value,
       imagePath: product.imageName,
+      id: product.id,
       ingredients: product.ingredients?.map((ingredient) => ({
         icon: ingredient.icon.value,
         name: ingredient.name.value,
