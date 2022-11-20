@@ -50,9 +50,7 @@ export class CreateProductHandler
       if (product.isLeft()) return unprocessableEntity(product.value);
 
       return created<ProductDTO>(new ProductDTO(product.value));
-    } catch (error) {
-      console.error(error);
-
+    } catch {
       return internalServerError();
     }
   }

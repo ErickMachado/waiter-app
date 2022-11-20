@@ -7,6 +7,7 @@ export class ProductDTO {
   public readonly ingredients?: Ingredient[] = [];
   public readonly name: string;
   public readonly icon: string;
+  public readonly imageName: string;
 
   constructor(product: Product) {
     this.category = product.category;
@@ -18,5 +19,6 @@ export class ProductDTO {
     }));
     this.name = product.name.value;
     this.icon = product.description.value;
+    this.imageName = product.imageName;
   }
 }

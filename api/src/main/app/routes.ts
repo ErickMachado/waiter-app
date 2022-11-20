@@ -35,7 +35,9 @@ router.post('/products', upload.single('image'), async (request, response) => {
     imageName: request.file?.filename ?? '',
     name: request.body.name,
     price: request.body.price,
-    ingredients: JSON.parse(request.body.ingredients ?? []),
+    ingredients: request.body.ingredients
+      ? JSON.parse(request.body.ingredients)
+      : undefined,
   };
 
   const { body, statusCode } = await handler.handle({ body: payload });

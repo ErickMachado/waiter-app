@@ -113,6 +113,19 @@ describe('Create product handler', () => {
     );
   });
 
+  it('Should return 400 when name is missing', async () => {
+    // Arrange
+    const body = mockProductData({ name: '' });
+    const { sut } = makeSut();
+
+    // Act
+    const response = await sut.handle({ body });
+
+    // Assert
+    expect(response.statusCode).toBe(400);
+    expect((response.body as HttpError)?.error).toBe('Missing param: name');
+  });
+
   it('Should return 400 when price is missing', async () => {
     // Arrange
     const body = mockProductData({ price: 0 });
@@ -154,5 +167,21 @@ describe('Create product handler', () => {
     // Assert
     expect(response.statusCode).toBe(201);
     expect(response.body).toBeInstanceOf(ProductDTO);
+  });
+
+  it('Should return 500 when an unknown error happens', async () => {
+    // Arrange
+    const body = mockProductData();
+    const executeMock = vi.fn(() => {
+      throw new Error('Test');
+    });
+    const { sut } = makeSut(executeMock);
+
+    // Act
+    const response = await sut.handle({ body });
+
+    // Assert
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toBeUndefined();
   });
 });
