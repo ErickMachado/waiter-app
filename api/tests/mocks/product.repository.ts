@@ -5,6 +5,10 @@ import { mockProductData } from '@tests/mocks/product.mock';
 export class InMemoryProductsRepository implements ProductsRepository {
   private database = new Map<string, Product>();
 
+  public async listAll(): Promise<Product[]> {
+    return [...this.database.values()];
+  }
+
   public async save(product: Product): Promise<void> {
     this.database.set(product.id, product);
   }
