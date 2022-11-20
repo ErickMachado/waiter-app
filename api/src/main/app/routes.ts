@@ -3,7 +3,10 @@ import {
   buildCreateCategoriesHandler,
   buildListCategoriesHandler,
 } from '@/main/factories/category';
-import { buildCreateProductHandler } from '@/main/factories/product';
+import {
+  buildCreateProductHandler,
+  buildListProductsHandler,
+} from '@/main/factories/product';
 import { ProductData } from '@/entities';
 import { upload } from '@/main/app/middlewares';
 
@@ -41,6 +44,14 @@ router.post('/products', upload.single('image'), async (request, response) => {
   };
 
   const { body, statusCode } = await handler.handle({ body: payload });
+
+  return response.status(statusCode).json(body);
+});
+
+router.get('/products', async (request, response) => {
+  const handler = buildListProductsHandler();
+
+  const { body, statusCode } = await handler.handle();
 
   return response.status(statusCode).json(body);
 });
