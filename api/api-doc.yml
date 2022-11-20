@@ -73,6 +73,25 @@ paths:
                 $ref: '#/components/schemas/InternalServerError'
       tags: ['Category']
   /products:
+    get:
+      description: 'Return all products'
+      summary: 'Return all products'
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                type: 'array'
+                items:
+                  $ref: '#/components/schemas/Product'
+        '500':
+          description: 'An unknown error happens'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+      tags: ['Product']
     post:
       description: 'Create a new product'
       summary: 'Create a new product'
