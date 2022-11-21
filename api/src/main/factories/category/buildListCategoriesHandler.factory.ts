@@ -1,5 +1,5 @@
 import { MongoCategoriesRepository } from '@/external/repositories/mongo';
-import { ListCategoriesHandler } from '@/presentation/handlers/category/listCategories';
+import { ListCategoriesHandler } from '@/presentation/handlers/category';
 import { ListCategoriesUseCase } from '@/useCases/category';
 
 export function buildListCategoriesHandler() {

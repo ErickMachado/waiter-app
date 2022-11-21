@@ -1,5 +1,6 @@
 import { Product } from '@/entities';
 import { ProductsRepository } from '@/useCases/ports';
+import { faker } from '@faker-js/faker';
 import { mockProductData } from '@tests/mocks/product.mock';
 
 export class InMemoryProductsRepository implements ProductsRepository {
@@ -13,8 +14,8 @@ export class InMemoryProductsRepository implements ProductsRepository {
     this.database.set(product.id, product);
   }
 
-  public populate(): Product {
-    const product = Product.create(mockProductData());
+  public populate(categoryId = faker.datatype.uuid()): Product {
+    const product = Product.create(mockProductData({ categoryId }));
 
     if (product.isLeft()) {
       throw new Error('Invalid product mock');
@@ -23,5 +24,13 @@ export class InMemoryProductsRepository implements ProductsRepository {
     this.database.set(product.value.id, product.value);
 
     return product.value;
+  }
+
+  public async listAllByCategoryId(categoryId: string): Promise<Product[]> {
+    const categories = [...this.database.values()].filter(
+      (product) => product.categoryId === categoryId
+    );
+
+    return categories;
   }
 }

@@ -1,7 +1,7 @@
 import { CategoryDTO } from '@/presentation/dto';
 import { ListCategoriesUseCase } from '@/useCases/category';
 import { InMemoryCategoriesRepository } from '@tests/mocks/category.repository';
-import { ListCategoriesHandler } from '.';
+import { ListCategoriesHandler } from '@/presentation/handlers/category';
 
 const makeSut = (executeMock?: () => unknown) => {
   const useCase = {

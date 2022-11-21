@@ -1,4 +1,5 @@
 export interface HttpRequest<B> {
+  params?: Record<string, string>;
   body?: B;
 }
 

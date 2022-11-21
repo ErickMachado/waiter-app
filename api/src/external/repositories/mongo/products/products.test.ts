@@ -100,4 +100,64 @@ describe('Mongo products repository', () => {
     // Assert
     expect(products).rejects.toThrow();
   });
+
+  it('Should return instances of product entity when products exists', async () => {
+    // Arrange
+    vi.spyOn(ProductSchema, 'find').mockResolvedValueOnce([
+      {
+        _id: faker.datatype.uuid(),
+        id: faker.datatype.uuid(),
+        name: faker.lorem.word(),
+        description: faker.lorem.words(),
+        ingredients: [{ icon: '🧀', name: faker.lorem.word() }],
+        price: faker.datatype.number(),
+      },
+    ]);
+    const sut = new MongoProductsRepository();
+
+    // Act
+    const products = await sut.listAllByCategoryId(faker.datatype.uuid());
+
+    // Assert
+    for (const product of products) {
+      expect(product).toBeInstanceOf(Product);
+    }
+  });
+
+  it('Should throw when data returned has invalid values', async () => {
+    // Arrange
+    vi.spyOn(ProductSchema, 'find').mockResolvedValueOnce([
+      {
+        _id: faker.datatype.uuid(),
+        id: faker.datatype.uuid(),
+        name: faker.lorem.word(),
+        description: faker.lorem.words(),
+        ingredients: [{ icon: '🧀🧀', name: faker.lorem.word() }],
+        price: faker.datatype.number(),
+      },
+    ]);
+    const sut = new MongoProductsRepository();
+
+    // Act
+    const products = sut.listAllByCategoryId(faker.datatype.uuid());
+
+    // Assert
+    expect(products).rejects.toThrow();
+  });
+
+  it('Should return empty array when there is no products', async () => {
+    // Arrange
+    const sut = new MongoProductsRepository();
+    const product = Product.create(mockProductData());
+
+    if (product.isLeft()) {
+      throw new Error('Invalid product');
+    }
+
+    // Act
+    const products = await sut.listAllByCategoryId(faker.datatype.uuid());
+
+    // Assert
+    expect(products).toEqual([]);
+  });
 });

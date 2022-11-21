@@ -29,6 +29,32 @@ export class MongoProductsRepository implements ProductsRepository {
     });
   }
 
+  public async listAllByCategoryId(categoryId: string): Promise<Product[]> {
+    const documents = await ProductSchema.find({ categoryId });
+
+    if (!documents?.length) return [];
+
+    return documents.map((document) => {
+      const product = Product.create(
+        {
+          categoryId: document.id,
+          description: document.description,
+          imageName: document.imagePath,
+          name: document.name,
+          price: Number(document.price),
+          ingredients: document.ingredients as Ingredient[],
+        },
+        document.id
+      );
+
+      if (product.isLeft()) {
+        throw new Error('Invalid category');
+      }
+
+      return product.value;
+    });
+  }
+
   public async save(product: Product): Promise<void> {
     await ProductSchema.create({
       categoryId: product.categoryId,
