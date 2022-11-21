@@ -1,11 +1,15 @@
 import { mockCategoryData } from '@tests/mocks';
-import { initTestApp } from '@tests/utils/initTestApp';
+import { createUploadsFolder, initTestApp } from '@tests/utils/initTestApp';
 import mongoose from 'mongoose';
 
 describe('GET /categories', () => {
   afterEach(async () => {
     await mongoose.connection.db.dropDatabase();
     await mongoose.disconnect();
+  });
+
+  beforeAll(async () => {
+    await createUploadsFolder();
   });
 
   it('Should return 200 with a list of registered categories', async () => {

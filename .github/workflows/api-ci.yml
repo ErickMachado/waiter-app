@@ -48,8 +48,6 @@ jobs:
         uses: "supercharge/mongodb-github-action@1.8.0"
       - name: "Install dependencies"
         run: "cd api && yarn install"
-      - name: "Create uploads folder"
-        run: "cd api && mkdir uploads"
       - name: "Run integration tests"
         run: "cd api && yarn test:integration"
   docs:

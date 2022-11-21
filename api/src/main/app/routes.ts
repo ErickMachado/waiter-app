@@ -2,6 +2,7 @@ import { Router } from 'express';
 import {
   buildCreateCategoriesHandler,
   buildListCategoriesHandler,
+  buildListProductsByCategory,
 } from '@/main/factories/category';
 import {
   buildCreateProductHandler,
@@ -27,6 +28,18 @@ router.post('/categories', async (request, reply) => {
   const response = await handler.handle({ body: request.body });
 
   reply.status(response.statusCode).json(response.body);
+});
+
+router.get('/categories/:categoryId/products', async (request, response) => {
+  const handler = buildListProductsByCategory();
+
+  const { body, statusCode } = await handler.handle({
+    params: {
+      categoryId: request.params.categoryId,
+    },
+  });
+
+  return response.status(statusCode).json(body);
 });
 
 // Products

@@ -11,7 +11,7 @@ export class MongoProductsRepository implements ProductsRepository {
     return documents.map((document) => {
       const product = Product.create(
         {
-          categoryId: document.id,
+          categoryId: document.categoryId,
           description: document.description,
           imageName: document.imagePath,
           name: document.name,
@@ -37,7 +37,7 @@ export class MongoProductsRepository implements ProductsRepository {
     return documents.map((document) => {
       const product = Product.create(
         {
-          categoryId: document.id,
+          categoryId: document.categoryId,
           description: document.description,
           imageName: document.imagePath,
           name: document.name,

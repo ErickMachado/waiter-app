@@ -1,13 +1,17 @@
 import { mockCategoryData } from '@tests/mocks';
 import { faker } from '@faker-js/faker';
 import { CategorySchema } from '@/external/schemas/Category';
-import { initTestApp } from '@tests/utils/initTestApp';
+import { createUploadsFolder, initTestApp } from '@tests/utils/initTestApp';
 import mongoose from 'mongoose';
 
 describe('POST /categories', () => {
   afterEach(async () => {
     await mongoose.connection.db.dropDatabase();
     await mongoose.disconnect();
+  });
+
+  beforeAll(async () => {
+    await createUploadsFolder();
   });
 
   it('Should return 400 when name is missing', async () => {

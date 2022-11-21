@@ -1,21 +1,16 @@
-import path from 'node:path';
-import { initTestApp } from '@tests/utils/initTestApp';
+import { createUploadsFolder, initTestApp } from '@tests/utils/initTestApp';
 import { mockCategoryData } from '@tests/mocks';
-import { faker } from '@faker-js/faker';
 import mongoose from 'mongoose';
-
-const IMAGE_TEST_PATH = path.resolve(
-  __dirname,
-  '..',
-  '..',
-  'mocks',
-  'test.jpg'
-);
+import { createProduct } from '@tests/utils/createProduct';
 
 describe('GET /products', () => {
   afterEach(async () => {
     await mongoose.connection.db.dropDatabase();
     await mongoose.disconnect();
+  });
+
+  beforeAll(async () => {
+    await createUploadsFolder();
   });
 
   it('Should return 200 with an empty array', async () => {
@@ -35,14 +30,7 @@ describe('GET /products', () => {
     const { app } = await initTestApp();
     const category = await app.post('/categories').send(mockCategoryData());
 
-    await app
-      .post('/products')
-      .set('Content-Type', 'multipart/form-data')
-      .attach('image', IMAGE_TEST_PATH)
-      .field('description', faker.lorem.words())
-      .field('name', faker.lorem.word())
-      .field('categoryId', category.body.id)
-      .field('price', faker.datatype.number().toString());
+    await createProduct(app, { categoryId: category.body.id });
 
     // Act
     const { body, statusCode } = await app.get('/products');

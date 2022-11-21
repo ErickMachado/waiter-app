@@ -129,4 +129,7 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-uploads/
+uploads_test/
+
+uploads/*
+!uploads/.gitkeep

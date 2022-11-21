@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { faker } from '@faker-js/faker';
-import { initTestApp } from '@tests/utils/initTestApp';
+import { createUploadsFolder, initTestApp } from '@tests/utils/initTestApp';
 import mongoose from 'mongoose';
 import { mockCategoryData } from '@tests/mocks';
 import { ProductSchema } from '@/external/schemas/Product';
@@ -17,6 +17,10 @@ describe('POST /products', () => {
   afterEach(async () => {
     await mongoose.connection.db.dropDatabase();
     await mongoose.disconnect();
+  });
+
+  beforeAll(async () => {
+    await createUploadsFolder();
   });
 
   it('Should return 400 when description is missing', async () => {
