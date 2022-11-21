@@ -83,7 +83,7 @@ cd ~/waiter-app/api && yarn test:unit
 cd ~/waiter-app/api && yarn test:integration
 ```
 
-> ⚠️ Até esse momento, ainda não implementei uma separação dos _uploads_ de arquivos dos testes de integração e dos _uploads_ de desenvolvimento. Por isso seria legal você deletar os arquivos gerados pelos testes de integração do diretório `/uploads`.
+> ⚠️ Os _uploads_ de arquivos dos testes vão para a pasta `uploads_test`. De tempos em tempos, é legal você deletar essa pasta para evitar acumular muitos arquivos no seu dispositivo. A pasta é automaticamente criada pelos testes caso não exista.
 
 ---
 
