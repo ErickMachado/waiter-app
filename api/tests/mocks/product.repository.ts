@@ -33,4 +33,14 @@ export class InMemoryProductsRepository implements ProductsRepository {
 
     return categories;
   }
+
+  public async findById(productId: string): Promise<Product | undefined> {
+    return [...this.database.values()].find(({ id }) => id === productId);
+  }
+
+  public async exists(productId: string): Promise<boolean> {
+    if (!this.database.get(productId)) return false;
+
+    return true;
+  }
 }

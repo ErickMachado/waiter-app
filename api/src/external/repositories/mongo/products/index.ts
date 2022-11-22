@@ -69,4 +69,36 @@ export class MongoProductsRepository implements ProductsRepository {
       price: product.price,
     });
   }
+
+  public async findById(productId: string): Promise<Product | undefined> {
+    const document = await ProductSchema.findOne({ id: productId });
+
+    if (!document) return undefined;
+
+    const product = Product.create(
+      {
+        categoryId: document.categoryId,
+        description: document.description,
+        imageName: document.imagePath,
+        name: document.name,
+        price: Number(document.price),
+        ingredients: document.ingredients as Ingredient[],
+      },
+      document.id
+    );
+
+    if (product.isLeft()) {
+      throw new Error('Invalid category');
+    }
+
+    return product.value;
+  }
+
+  public async exists(productId: string): Promise<boolean> {
+    const document = await ProductSchema.exists({ id: productId });
+
+    if (!document) return false;
+
+    return true;
+  }
 }

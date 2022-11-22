@@ -1,20 +1,18 @@
 import { model, Schema } from 'mongoose';
 
-export const OrderSchema = model(
-  'Order',
-  new Schema({
+const orderSchema = new Schema(
+  {
     createdAt: {
       default: Date.now,
       type: Date,
     },
-    products: {
+    items: {
       required: true,
       type: [
         {
-          product: {
-            ref: 'Product',
+          productId: {
             required: true,
-            type: Schema.Types.ObjectId,
+            type: String,
           },
           quantity: {
             default: 1,
@@ -24,8 +22,7 @@ export const OrderSchema = model(
       ],
     },
     status: {
-      default: 'WAITING',
-      enum: ['WAITING', 'IN_PRODUCTION', 'DONE'],
+      enum: ['Waiting', 'InProduction', 'Done'],
       required: true,
       type: String,
     },
@@ -33,5 +30,14 @@ export const OrderSchema = model(
       required: true,
       type: String,
     },
-  })
+  },
+  { toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
+
+orderSchema.virtual('items.product', {
+  ref: 'Product',
+  localField: 'items.productId',
+  foreignField: 'id',
+});
+
+export const OrderSchema = model('Order', orderSchema);
