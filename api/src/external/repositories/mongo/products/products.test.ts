@@ -3,6 +3,8 @@ import { MongoProductsRepository } from '@/external/repositories/mongo/products'
 import { Product } from '@/entities';
 import { mockProductData } from '@tests/mocks';
 import { faker } from '@faker-js/faker';
+import cuid from 'cuid';
+import { Types } from 'mongoose';
 
 vi.mock('@/external/schemas/Product');
 
@@ -159,5 +161,95 @@ describe('Mongo products repository', () => {
 
     // Assert
     expect(products).toEqual([]);
+  });
+
+  it('Should call schema exists method', async () => {
+    // Arrange
+    const sut = new MongoProductsRepository();
+    const spy = vi.spyOn(ProductSchema, 'exists');
+    const id = cuid();
+
+    // Act
+    await sut.exists(id);
+
+    // Assert
+    expect(spy).toHaveBeenCalledWith({ id });
+  });
+
+  it('Should return false when document does not exists', async () => {
+    // Arrange
+    const sut = new MongoProductsRepository();
+    vi.spyOn(ProductSchema, 'exists').mockResolvedValueOnce(null);
+    const id = cuid();
+
+    // Act
+    const response = await sut.exists(id);
+
+    // Assert
+    expect(response).toBe(false);
+  });
+
+  it('Should return true when document exists', async () => {
+    // Arrange
+    const sut = new MongoProductsRepository();
+    vi.spyOn(ProductSchema, 'exists').mockResolvedValueOnce({
+      _id: '' as unknown as Types.ObjectId,
+    });
+    const id = cuid();
+
+    // Act
+    const response = await sut.exists(id);
+
+    // Assert
+    expect(response).toBe(true);
+  });
+
+  it('Should return undefined when document does not exists', async () => {
+    // Arrange
+    const sut = new MongoProductsRepository();
+    vi.spyOn(ProductSchema, 'findOne').mockResolvedValueOnce(null);
+    const id = cuid();
+
+    // Act
+    const response = await sut.findById(id);
+
+    // Assert
+    expect(response).toBeUndefined();
+  });
+
+  it('Should return throw when product format is incorrect', async () => {
+    // Arrange
+    const sut = new MongoProductsRepository();
+    vi.spyOn(ProductSchema, 'findOne').mockResolvedValueOnce({
+      categoryId: cuid(),
+      description: faker.lorem.words(),
+      imageName: faker.system.fileName(),
+      name: faker.lorem.word(),
+      price: faker.datatype.number(),
+      ingredients: [{ icon: '🍔🧀', name: faker.lorem.word() }],
+    });
+    const id = cuid();
+
+    // Act & Assert
+    await expect(sut.findById(id)).rejects.toThrow();
+  });
+
+  it('Should return an instance of Product', async () => {
+    // Arrange
+    const sut = new MongoProductsRepository();
+    vi.spyOn(ProductSchema, 'findOne').mockResolvedValueOnce({
+      categoryId: cuid(),
+      description: faker.lorem.words(),
+      imageName: faker.system.fileName(),
+      name: faker.lorem.word(),
+      price: faker.datatype.number(),
+      ingredients: [{ icon: '🧀', name: faker.lorem.word() }],
+    });
+
+    // Act
+    const response = await sut.findById(cuid());
+
+    // Assert
+    expect(response).toBeInstanceOf(Product);
   });
 });

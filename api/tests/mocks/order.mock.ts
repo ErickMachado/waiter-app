@@ -5,10 +5,11 @@ interface MockOptions {
   numberOfItems: number;
   itemsQuantity: number;
   productId: string;
+  table: string;
 }
 
 export function mockOrderData(data?: Partial<MockOptions>): OrderData {
-  const numberOfItems = data?.numberOfItems || 1;
+  const numberOfItems = data?.numberOfItems ?? 1;
   const items: Item[] = [];
 
   for (let count = 0; count < numberOfItems; count++) {
@@ -20,6 +21,6 @@ export function mockOrderData(data?: Partial<MockOptions>): OrderData {
 
   return {
     items,
-    table: faker.datatype.number().toString(),
+    table: data?.table ?? faker.datatype.number().toString(),
   };
 }
