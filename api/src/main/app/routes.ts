@@ -10,7 +10,10 @@ import {
 } from '@/main/factories/product';
 import { ProductData } from '@/entities';
 import { upload } from '@/main/app/middlewares';
-import { buildCreateOrderHandler } from '@/main/factories/order';
+import {
+  buildCreateOrderHandler,
+  buildListOrdersHandler,
+} from '@/main/factories/order';
 
 const router = Router();
 
@@ -77,6 +80,14 @@ router.post('/orders', async (request, response) => {
   const { body, statusCode } = await handler.handle({
     body: request.body,
   });
+
+  return response.status(statusCode).json(body);
+});
+
+router.get('/orders', async (request, response) => {
+  const handler = buildListOrdersHandler();
+
+  const { body, statusCode } = await handler.handle();
 
   return response.status(statusCode).json(body);
 });
