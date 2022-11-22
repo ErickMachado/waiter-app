@@ -49,21 +49,14 @@ docker run --name mongodb -p 27017:27017 -d mongo
 cd && git clone git@github.com:ErickMachado/waiter-app.git
 ```
 
-3. A parte de _upload_ de arquivos acontece localmente, por isso será necessário criar um diretório chamado _uploads_ na pasta do projeto da API:
-
-```bash
-# O projeto será clonado para a sua pasta home
-cd ~/waiter-app/api && mkdir uploads
-```
-
-4. Entre no diretório do projeto e inicie o ambiente de desenvolvimento com:
+3. Entre no diretório do projeto e inicie o ambiente de desenvolvimento com:
 
 ```bash
 # O projeto será clonado para a sua pasta home
 cd ~/waiter-app/api && yarn dev
 ```
 
-5. Abra um cliente HTTP (recomendo o [Insomnia](https://insomnia.rest)) e comece a fazer uso da sua API 🙌
+4. Abra um cliente HTTP (recomendo o [Insomnia](https://insomnia.rest)) e comece a fazer uso da sua API 🙌
 
 > 💡 Você pode importar uma coleção de requisições prontas para o seu cliente HTTP favorito. O arquivo se encontra em `/waiter-app/assets/requests-collection.json`.
 
