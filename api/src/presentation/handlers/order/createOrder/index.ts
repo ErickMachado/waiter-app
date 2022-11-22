@@ -8,6 +8,7 @@ import {
   HttpResponse,
   internalServerError,
   notFound,
+  unprocessableEntity,
 } from '@/presentation/helpers';
 import { Handler } from '@/presentation/types/handler';
 import { Either } from '@/shared';
@@ -34,7 +35,9 @@ export class CreateOrderHandler
     try {
       const order = await this.useCase.execute(request.body);
 
-      if (order.isLeft()) return notFound(order.value);
+      if (order.isLeft() && order.value instanceof ProductNotFoundError)
+        return notFound(order.value);
+      if (order.isLeft()) return unprocessableEntity(order.value);
 
       return created(order.value);
     } catch {

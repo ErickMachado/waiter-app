@@ -3,8 +3,8 @@ import { model, Schema } from 'mongoose';
 const orderSchema = new Schema(
   {
     createdAt: {
-      default: Date.now,
-      type: Date,
+      required: true,
+      type: String,
     },
     items: {
       required: true,

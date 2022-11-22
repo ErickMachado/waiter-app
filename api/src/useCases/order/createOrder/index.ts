@@ -1,4 +1,5 @@
 import { Item, Order, OrderData } from '@/entities';
+import { OrderItemsLengthError } from '@/entities/errors';
 import { Either, left, right } from '@/shared';
 import { ProductNotFoundError } from '@/useCases/errors';
 import { ProductsRepository } from '@/useCases/ports';
@@ -6,7 +7,11 @@ import { OrdersRepository } from '@/useCases/ports/ordersRepository';
 import { UseCase } from '@/useCases/types/useCase';
 
 export class CreateOrderUseCase
-  implements UseCase<OrderData, Either<ProductNotFoundError, Order>>
+  implements
+    UseCase<
+      OrderData,
+      Either<ProductNotFoundError | OrderItemsLengthError, Order>
+    >
 {
   constructor(
     private readonly productsRepository: ProductsRepository,
@@ -15,7 +20,7 @@ export class CreateOrderUseCase
 
   public async execute(
     payload: OrderData
-  ): Promise<Either<ProductNotFoundError, Order>> {
+  ): Promise<Either<ProductNotFoundError | OrderItemsLengthError, Order>> {
     for (const item of payload.items) {
       const exists = await this.productsRepository.exists(item.productId);
 

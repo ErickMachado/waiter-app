@@ -8,8 +8,8 @@ const IMAGE_TEST_PATH = path.resolve(__dirname, '..', 'mocks', 'test.jpg');
 export async function createProduct(
   app: supertest.SuperTest<supertest.Test>,
   data?: Partial<ProductData>
-) {
-  await app
+): Promise<string> {
+  const { body } = await app
     .post('/products')
     .set('Content-Type', 'multipart/form-data')
     .attach('image', IMAGE_TEST_PATH)
@@ -21,4 +21,6 @@ export async function createProduct(
       'ingredients',
       JSON.stringify([{ icon: '🧀', name: faker.lorem.word() }])
     );
+
+  return body.id;
 }

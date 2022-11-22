@@ -29,16 +29,22 @@ export class Order {
     public readonly items: Item[],
     public readonly table: string,
     id?: string,
-    createdAt?: string
+    createdAt?: string,
+    status?: Status
   ) {
     this.createdAt = createdAt ?? new Date().toISOString();
-    this.status = Status.WAITING;
+    this.status = status ?? Status.WAITING;
     this.id = id ?? cuid();
   }
 
-  public static create(data: OrderData): Either<OrderItemsLengthError, Order> {
+  public static create(
+    data: OrderData,
+    id?: string,
+    createdAt?: string,
+    status?: Status
+  ): Either<OrderItemsLengthError, Order> {
     if (data.items.length > 10) return left(new OrderItemsLengthError());
 
-    return right(new Order(data.items, data.table));
+    return right(new Order(data.items, data.table, id, createdAt, status));
   }
 }
