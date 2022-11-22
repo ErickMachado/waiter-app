@@ -1,3 +1,7 @@
 application:
   port: 3333
   uploads_folder_name: uploads
+database:
+  database: waiterapp
+  host: localhost
+  port: 27017

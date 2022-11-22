@@ -1,11 +1,11 @@
 import mongoose from 'mongoose';
 import { app } from '@/main/app/app';
-import { settings } from './config';
+import { getConnectionString, settings } from './config';
 
 const PORT = settings.application.port;
 
 mongoose
-  .connect('mongodb://localhost:27017/waiterapp')
+  .connect(getConnectionString())
   .then(() => {
     console.log('🍃 Connected to mongoDB');
 
