@@ -1,6 +1,7 @@
 import { Order } from '@/entities';
 import { OrdersRepository } from '@/useCases/ports/ordersRepository';
 import { mockOrderData } from '@tests/mocks';
+import cuid from 'cuid';
 
 export class InMemoryOrdersRepository implements OrdersRepository {
   private readonly database = new Map<string, Order>();
@@ -13,8 +14,10 @@ export class InMemoryOrdersRepository implements OrdersRepository {
     this.database.set(order.id, order);
   }
 
-  public populate(): Order {
-    const order = Order.create(mockOrderData());
+  public populate(productId?: string): Order {
+    const order = Order.create(
+      mockOrderData({ productId: productId ?? cuid() })
+    );
 
     if (order.isLeft()) {
       throw new Error('Order is not valid');
@@ -23,5 +26,9 @@ export class InMemoryOrdersRepository implements OrdersRepository {
     this.database.set(order.value.id, order.value);
 
     return order.value;
+  }
+
+  public async findById(id: string): Promise<Order | undefined> {
+    return this.database.get(id);
   }
 }

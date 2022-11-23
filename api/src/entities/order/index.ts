@@ -23,10 +23,10 @@ export interface OrderData {
 export class Order {
   public readonly createdAt: string;
   public readonly id: string;
-  public readonly status: Status;
+  public status: Status;
 
   private constructor(
-    public readonly items: Item[],
+    public items: Item[],
     public readonly table: string,
     id?: string,
     createdAt?: string,
@@ -35,6 +35,10 @@ export class Order {
     this.createdAt = createdAt ?? new Date().toISOString();
     this.status = status ?? Status.WAITING;
     this.id = id ?? cuid();
+  }
+
+  public updateStatus(status: Status) {
+    this.status = status;
   }
 
   public static create(

@@ -1,11 +1,13 @@
 import { InMemoryOrdersRepository } from '@tests/mocks';
 import { ListOrdersUseCase } from '@/useCases/order';
+import { InMemoryProductsRepository } from '@tests/mocks/product.repository';
 
 const makeSut = () => {
-  const repository = new InMemoryOrdersRepository();
-  const sut = new ListOrdersUseCase(repository);
+  const ordersRepository = new InMemoryOrdersRepository();
+  const productsRepository = new InMemoryProductsRepository();
+  const sut = new ListOrdersUseCase(ordersRepository, productsRepository);
 
-  return { repository, sut };
+  return { ordersRepository, sut };
 };
 
 describe('List order use case', () => {
@@ -22,10 +24,10 @@ describe('List order use case', () => {
 
   it('Should return an array with orders', async () => {
     // Arrange
-    const { repository, sut } = makeSut();
+    const { ordersRepository, sut } = makeSut();
 
-    repository.populate();
-    repository.populate();
+    ordersRepository.populate();
+    ordersRepository.populate();
 
     // Act
     const response = await sut.execute();
