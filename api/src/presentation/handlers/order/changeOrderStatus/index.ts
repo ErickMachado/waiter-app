@@ -6,6 +6,7 @@ import {
   HttpError,
   HttpRequest,
   HttpResponse,
+  internalServerError,
   notFound,
   ok,
   unprocessableEntity,
@@ -29,25 +30,29 @@ export class ChangeOrderStatusHandler
   public async handle(
     request: HttpRequest<ChangeOrderStatusPayload>
   ): Promise<HttpResponse<HttpError | OrderDTO | void>> {
-    if (!request.params?.orderId)
-      return badRequest(new MissingParamError('orderId'));
+    try {
+      if (!request.body?.orderId)
+        return badRequest(new MissingParamError('orderId'));
 
-    if (!request.body?.status)
-      return badRequest(new MissingParamError('status'));
+      if (!request.body?.status)
+        return badRequest(new MissingParamError('status'));
 
-    const response = await this.useCase.execute({
-      orderId: request.params.orderId,
-      status: request.body.status,
-    });
+      const response = await this.useCase.execute({
+        orderId: request.body.orderId,
+        status: request.body.status,
+      });
 
-    if (response.isLeft() && response.value instanceof OrderNotFoundError) {
-      return notFound(response.value);
+      if (response.isLeft() && response.value instanceof OrderNotFoundError) {
+        return notFound(response.value);
+      }
+
+      if (response.isLeft()) return unprocessableEntity(response.value);
+
+      const order = new OrderDTO(response.value);
+
+      return ok(order);
+    } catch {
+      return internalServerError();
     }
-
-    if (response.isLeft()) return unprocessableEntity(response.value);
-
-    const order = new OrderDTO(response.value);
-
-    return ok(order);
   }
 }

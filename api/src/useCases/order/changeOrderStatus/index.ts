@@ -49,7 +49,13 @@ export class ChangeOrderStatusUseCase
 
     order.items = items;
 
-    order.updateStatus(Status[status.toUpperCase() as keyof typeof Status]);
+    const newStatus = Object.values(Status).find(
+      (value) => value === status
+    ) as Status;
+
+    order.updateStatus(newStatus);
+
+    await this.ordersRepository.update(order);
 
     return right(order);
   }

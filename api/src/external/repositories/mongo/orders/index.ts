@@ -8,6 +8,9 @@ export class MongoOrdersRepository implements OrdersRepository {
 
     return documents
       .map((document) => {
+        const status = Object.values(Status).find(
+          (value) => value === document.status
+        ) as Status;
         const order = Order.create(
           {
             items: document.items,
@@ -15,7 +18,7 @@ export class MongoOrdersRepository implements OrdersRepository {
           },
           document.id,
           document.createdAt,
-          Status[document.status.toUpperCase() as keyof typeof Status]
+          status
         );
 
         if (order.isLeft()) {
@@ -60,5 +63,12 @@ export class MongoOrdersRepository implements OrdersRepository {
     }
 
     return order.value;
+  }
+
+  public async update(order: Order): Promise<void> {
+    await OrderSchema.updateOne(
+      { id: order.id },
+      { $set: { status: order.status } }
+    );
   }
 }

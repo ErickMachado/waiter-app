@@ -11,6 +11,7 @@ import {
 import { ProductData } from '@/entities';
 import { upload } from '@/main/app/middlewares';
 import {
+  buildChangeOrderStatusHandler,
   buildCreateOrderHandler,
   buildListOrdersHandler,
 } from '@/main/factories/order';
@@ -88,6 +89,19 @@ router.get('/orders', async (request, response) => {
   const handler = buildListOrdersHandler();
 
   const { body, statusCode } = await handler.handle();
+
+  return response.status(statusCode).json(body);
+});
+
+router.patch('/orders/:orderId', async (request, response) => {
+  const handler = buildChangeOrderStatusHandler();
+
+  const { body, statusCode } = await handler.handle({
+    body: {
+      orderId: request.params.orderId,
+      status: request.body.status,
+    },
+  });
 
   return response.status(statusCode).json(body);
 });

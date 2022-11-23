@@ -31,4 +31,8 @@ export class InMemoryOrdersRepository implements OrdersRepository {
   public async findById(id: string): Promise<Order | undefined> {
     return this.database.get(id);
   }
+
+  public async update(order: Order): Promise<void> {
+    this.database.set(order.id, order);
+  }
 }
