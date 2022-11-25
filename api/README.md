@@ -37,32 +37,39 @@
 
 1. Abra um terminal e rode o comando:
 
-```bash
+```sh
 # Inicializa um container chamado "mongodb" rodando Mongodb na porta 27017 (porta padrão do mongodb)
 docker run --name mongodb -p 27017:27017 -d mongo
 ```
 
 2. Clone o projeto para sua máquina com:
 
-```bash
+```sh
 # O projeto será clonado para a sua pasta home
 cd && git clone git@github.com:ErickMachado/waiter-app.git
 ```
 
-3. Entre no diretório do projeto e inicie o ambiente de desenvolvimento com:
+3. Inicie o banco de dados (MongoDB) com o comando:
 
-```bash
+```sh
+# Você vai precisar ter o Docker e o Docker compose instalado
+cd ~/waiter-app/api && docker-compose up -d
+```
+
+4. Entre no diretório do projeto e inicie o ambiente de desenvolvimento com:
+
+```sh
 # O projeto será clonado para a sua pasta home
 cd ~/waiter-app/api && yarn dev
 ```
 
-4. Abra um cliente HTTP (recomendo o [Insomnia](https://insomnia.rest)) e comece a fazer uso da sua API 🙌
+5. Abra um cliente HTTP (recomendo o [Insomnia](https://insomnia.rest)) e comece a fazer uso da sua API 🙌
 
 > 💡 Você pode importar uma coleção de requisições prontas para o seu cliente HTTP favorito. O arquivo se encontra em `/waiter-app/assets/requests-collection.json`.
 
 > 💡 O projeto também possuí documentação das rotas. você também pode dar uma olhada nele caso não queira usar a coleção pronta de requisições.
 
-## 🧪 Executando os tests
+## 🧪 Executando os testes
 
 Boa parte do projeto está coberto com testes unitários e de integração. Você pode abrindo um terminal e rodando o seguinte comando:
 
