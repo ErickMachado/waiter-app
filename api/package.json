@@ -28,7 +28,7 @@
   "main": "index.js",
   "name": "api",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc --project tsconfig.build.json",
     "dev": "tsx watch src/main/app/bootstrap.ts",
     "start": "node dist",
     "test:unit": "vitest run --dir src",
