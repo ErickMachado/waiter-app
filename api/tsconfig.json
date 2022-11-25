@@ -9,7 +9,7 @@
       "@tests/*": ["tests/*"]
     },
     "types": ["vitest/globals"],
-    "outDir": "./dist",
+    "outDir": "./build",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
