@@ -187,6 +187,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       tags: ['Order']
+  /orders/{orderId}:
     patch:
       description: 'This route is responsible for updating orders. More precisely, the order status.'
       summary: 'Change order status'
