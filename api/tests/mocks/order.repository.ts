@@ -35,4 +35,8 @@ export class InMemoryOrdersRepository implements OrdersRepository {
   public async update(order: Order): Promise<void> {
     this.database.set(order.id, order);
   }
+
+  public async delete(orderId: string): Promise<void> {
+    this.database.delete(orderId);
+  }
 }

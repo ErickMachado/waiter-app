@@ -3,6 +3,7 @@ import { MongoOrdersRepository } from '@/external/repositories/mongo/orders';
 import { OrderSchema } from '@/external/schemas/Order';
 import { faker } from '@faker-js/faker';
 import { mockOrderData } from '@tests/mocks';
+import cuid from 'cuid';
 
 vi.mock('@/external/schemas/Order');
 
@@ -71,5 +72,18 @@ describe('Mongo orders repository', () => {
 
     // Assert
     expect(spy).toHaveBeenCalled();
+  });
+
+  it('Should call schema method to delete document', async () => {
+    // Arrange
+    const spy = vi.spyOn(OrderSchema, 'deleteOne');
+    const id = cuid();
+    const sut = new MongoOrdersRepository();
+
+    // Act
+    await sut.delete(id);
+
+    // Assert
+    expect(spy).toHaveBeenCalledWith({ id });
   });
 });

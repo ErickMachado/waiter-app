@@ -11,6 +11,7 @@ import {
 import { ProductData } from '@/entities';
 import { upload } from '@/main/app/middlewares';
 import {
+  buildCancelOrderHandler,
   buildChangeOrderStatusHandler,
   buildCreateOrderHandler,
   buildListOrdersHandler,
@@ -101,6 +102,16 @@ router.patch('/orders/:orderId', async (request, response) => {
       orderId: request.params.orderId,
       status: request.body.status,
     },
+  });
+
+  return response.status(statusCode).json(body);
+});
+
+router.delete('/orders/:orderId', async (request, response) => {
+  const handler = buildCancelOrderHandler();
+
+  const { body, statusCode } = await handler.handle({
+    body: { orderId: request.params.orderId },
   });
 
   return response.status(statusCode).json(body);

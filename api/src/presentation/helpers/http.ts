@@ -48,6 +48,12 @@ export function internalServerError(): HttpResponse<void> {
   };
 }
 
+export function noContent(): HttpResponse<HttpError> {
+  return {
+    statusCode: 204,
+  };
+}
+
 export function notFound(error: Error): HttpResponse<HttpError> {
   return {
     body: buildError(error),

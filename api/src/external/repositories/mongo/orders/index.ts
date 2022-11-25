@@ -71,4 +71,8 @@ export class MongoOrdersRepository implements OrdersRepository {
       { $set: { status: order.status } }
     );
   }
+
+  public async delete(orderId: string): Promise<void> {
+    await OrderSchema.deleteOne({ id: orderId });
+  }
 }
