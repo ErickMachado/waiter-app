@@ -1,7 +1,6 @@
-import { Category, Ingredient, Product } from '@/entities';
+import { Ingredient, Product } from '@/entities';
 
 export class ProductDTO {
-  public readonly category?: Category;
   public readonly categoryId: string;
   public readonly id: string;
   public readonly ingredients?: Ingredient[] = [];
@@ -11,7 +10,6 @@ export class ProductDTO {
   public readonly price: number;
 
   constructor(product: Product) {
-    this.category = product.category;
     this.categoryId = product.categoryId;
     this.id = product.id;
     this.ingredients = product.ingredients?.map((ingredient) => ({

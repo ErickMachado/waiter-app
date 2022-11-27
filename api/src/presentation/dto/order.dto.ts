@@ -1,4 +1,5 @@
 import { Order, Product } from '@/entities';
+import { ProductDTO } from './product.dto';
 
 export class OrderDTO {
   public readonly id: string;
@@ -10,10 +11,14 @@ export class OrderDTO {
   constructor(order: Order) {
     this.id = order.id;
     this.table = order.table;
-    this.items = order.items.map((order) => ({
-      product: order.product as Product,
-      quantity: order.quantity,
-    }));
+    this.items = order.items.map((order) => {
+      const product = new ProductDTO(order.product as Product);
+
+      return {
+        product: product as unknown as Product,
+        quantity: order.quantity,
+      };
+    });
     this.createdAt = order.createdAt;
     this.status = order.status;
   }

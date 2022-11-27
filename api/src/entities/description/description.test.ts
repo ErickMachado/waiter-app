@@ -6,48 +6,52 @@ import {
 } from '@/entities/errors';
 import { faker } from '@faker-js/faker';
 
-describe('Description entity', () => {
-  it('Should reject descriptions greater than 255 characters', () => {
-    // Arrange
-    const description = faker.lorem.words(256);
+describe('Description', () => {
+  describe('Invalid inputs', () => {
+    it('When the provided string have more than 255 characters, expect it to return an InvalidDescriptionLength error', () => {
+      // Arrange
+      const description = faker.lorem.words(256);
 
-    // Act
-    const sut = Description.parse(description);
+      // Act
+      const sut = Description.parse(description);
 
-    // Assert
-    expect(sut).toEqual(left(new InvalidDescriptionLengthError()));
+      // Assert
+      expect(sut).toEqual(left(new InvalidDescriptionLengthError()));
+    });
+
+    it('When the provided string is empty, expect it to return an EmptyDescription error', () => {
+      // Arrange
+      const description = '';
+
+      // Act
+      const sut = Description.parse(description);
+
+      // Assert
+      expect(sut).toEqual(left(new EmptyDescriptionError()));
+    });
   });
 
-  it('Should reject empty descriptions', () => {
-    // Arrange
-    const description = '';
+  describe('Happy path', () => {
+    it('When the property "value" is accessed, expect it to return the description', () => {
+      // Arrange
+      const description = faker.lorem.words();
 
-    // Act
-    const sut = Description.parse(description);
+      // Act
+      const sut = Description.parse(description);
 
-    // Assert
-    expect(sut).toEqual(left(new EmptyDescriptionError()));
-  });
+      // Assert
+      expect(sut.isRight() && sut.value.value).toBe(description);
+    });
 
-  it('Should return description on value access', () => {
-    // Arrange
-    const description = faker.lorem.words();
+    it('When the provided string matches the requirements, expect the description to be returned', () => {
+      // Arrange
+      const description = faker.lorem.words();
 
-    // Act
-    const sut = Description.parse(description);
+      // Act
+      const sut = Description.parse(description);
 
-    // Assert
-    expect(sut.isRight() && sut.value.value).toBe(description);
-  });
-
-  it('Should create description', () => {
-    // Arrange
-    const description = faker.lorem.words();
-
-    // Act
-    const sut = Description.parse(description);
-
-    // Assert
-    expect(sut).toEqual(right({ description }));
+      // Assert
+      expect(sut).toEqual(right({ description }));
+    });
   });
 });
